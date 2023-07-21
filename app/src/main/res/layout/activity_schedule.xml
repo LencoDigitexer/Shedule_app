@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <!-- Область с расписанием -->
+    <TableLayout
+        android:id="@+id/scheduleTable"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/buttonLayout"
+        android:padding="16dp">
+
+        <!-- Заголовок таблицы -->
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="№ пары"
+                android:padding="8dp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Дисциплина"
+                android:padding="8dp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="№ кабинета"
+                android:padding="8dp"
+                android:textStyle="bold" />
+
+        </TableRow>
+
+        <!-- Добавьте строки для расписания, они будут появляться здесь программно -->
+
+    </TableLayout>
+    <HorizontalScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:gravity="center">
+        <!-- Кнопки для дней недели -->
+        <LinearLayout
+            android:id="@+id/buttonLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="8dp">
+
+            <Button
+                android:id="@+id/buttonMonday"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="ПН" />
+
+            <Button
+                android:id="@+id/buttonTuesday"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="ВТ" />
+
+            <Button
+                android:id="@+id/buttonWednesday"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="СР" />
+
+            <Button
+                android:id="@+id/buttonThursday"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="ЧТ" />
+
+            <Button
+                android:id="@+id/buttonFriday"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="ПТ" />
+
+            <Button
+                android:id="@+id/buttonSaturday"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="СБ" />
+
+
+        </LinearLayout>
+    </HorizontalScrollView>
+</RelativeLayout>
