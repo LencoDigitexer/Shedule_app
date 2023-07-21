@@ -28,7 +28,6 @@ import java.net.URL;
 import java.util.ArrayList;
 
 public class GroupActivity extends AppCompatActivity {
-
     private LinearLayout groupButtonsLayout;
     private ArrayList<Group> groups;
     private University selectedUniversity;
