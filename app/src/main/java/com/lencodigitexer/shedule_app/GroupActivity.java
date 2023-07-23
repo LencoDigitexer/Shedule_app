@@ -1,6 +1,7 @@
 package com.lencodigitexer.shedule_app;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import com.google.android.material.snackbar.Snackbar;
 import androidx.appcompat.app.AppCompatActivity;
@@ -17,6 +18,8 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.Toast;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -32,6 +35,10 @@ public class GroupActivity extends AppCompatActivity {
     private ArrayList<Group> groups;
     private University selectedUniversity;
 
+    // Объект SharedPreferences для сохранения данных
+    SharedPreferences sharedPreferences;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,11 +47,24 @@ public class GroupActivity extends AppCompatActivity {
         groupButtonsLayout = findViewById(R.id.groupButtonsLayout);
         groups = new ArrayList<>();
 
-        // Получаем выбранный университет из Intent
-        selectedUniversity = getIntent().getParcelableExtra("selected_university");
+        // Получаем объект SharedPreferences по имени "mypref"
+        sharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE);
 
-        // Выполните HTTP GET запрос для получения данных о группах из API
-        new GetGroupsTask().execute("https://lencodigitexer.github.io/schedule-api/" + selectedUniversity.getName() + "/groups.json");
+        // Получаем выбранный университет из SharedPreferences
+        String selectedUniversity = sharedPreferences.getString("selected_university", null);
+        String selectedGroup = sharedPreferences.getString("selected_group", null);
+
+
+        if (selectedUniversity != null && selectedGroup != null){
+            Intent intent = new Intent(GroupActivity.this, ScheduleActivity.class);
+            startActivity(intent);
+        } else {
+            // Выполните HTTP GET запрос для получения данных о группах из API
+            new GetGroupsTask().execute("https://lencodigitexer.github.io/schedule-api/" + selectedUniversity + "/groups.json");
+        }
+
+
+
     }
 
     private void createGroupButtons() {
@@ -52,11 +72,22 @@ public class GroupActivity extends AppCompatActivity {
             Button button = new Button(this);
             button.setText(group.getDescription());
             button.setOnClickListener(v -> {
+                // Обработчик клика по кнопке университета
+                String selectedGroupName = group.getName();
+
+                // Сохранение выбранного университета и группы в SharedPreferences
+                SharedPreferences preferences = getSharedPreferences("MyPrefs", MODE_PRIVATE);
+                SharedPreferences.Editor editor = preferences.edit();
+                editor.putString("selected_group", selectedGroupName);
+                editor.apply();
+
+                Toast toast = Toast.makeText(getApplicationContext(),
+                        "Группа сохранена!", Toast.LENGTH_SHORT);
+                toast.show();
+
                 // Обработчик клика по кнопке группы
                 // Открываем новую активити с расписанием выбранной группы
                 Intent intent = new Intent(GroupActivity.this, ScheduleActivity.class);
-                intent.putExtra("selected_university", selectedUniversity);
-                intent.putExtra("selected_group", group);
                 startActivity(intent);
             });
 

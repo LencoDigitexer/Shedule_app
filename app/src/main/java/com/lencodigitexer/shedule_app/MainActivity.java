@@ -3,12 +3,14 @@ package com.lencodigitexer.shedule_app;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -31,13 +33,25 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
 
-        universityButtonsLayout = findViewById(R.id.universityButtonsLayout);
-        universities = new ArrayList<>();
+        // Загрузка сохраненных данных
+        SharedPreferences preferences = getSharedPreferences("MyPrefs", MODE_PRIVATE);
+        String selectedUniversityName = preferences.getString("selected_university", null);
 
-        // Выполните HTTP GET запрос для получения данных из API
-        new GetUniversitiesTask().execute("https://lencodigitexer.github.io/schedule-api/university.json");
+        // Проверка, есть ли сохраненные данные
+        if (selectedUniversityName != null) {
+            Intent intent = new Intent(MainActivity.this, GroupActivity.class);
+            startActivity(intent);
+        }
+        else {
+            setContentView(R.layout.activity_main);
+
+            universityButtonsLayout = findViewById(R.id.universityButtonsLayout);
+            universities = new ArrayList<>();
+
+            // Выполните HTTP GET запрос для получения данных из API
+            new GetUniversitiesTask().execute("https://lencodigitexer.github.io/schedule-api/university.json");
+        }
     }
 
     private void createUniversityButtons() {
@@ -47,6 +61,20 @@ public class MainActivity extends AppCompatActivity {
             button.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+
+                    // Обработчик клика по кнопке университета
+                    String selectedUniversityName = university.getName();
+
+                    // Сохранение выбранного университета и группы в SharedPreferences
+                    SharedPreferences preferences = getSharedPreferences("MyPrefs", MODE_PRIVATE);
+                    SharedPreferences.Editor editor = preferences.edit();
+                    editor.putString("selected_university", selectedUniversityName);
+                    editor.apply();
+
+                    Toast toast = Toast.makeText(getApplicationContext(),
+                            "Университет сохранен!", Toast.LENGTH_SHORT);
+                    toast.show();
+
                     // Обработчик клика по кнопке университета
                     // Открываем новую активити с выбором групп для выбранного университета
                     Intent intent = new Intent(MainActivity.this, GroupActivity.class);

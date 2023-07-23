@@ -2,6 +2,7 @@ package com.lencodigitexer.shedule_app;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.AsyncTask;
@@ -22,10 +23,8 @@ import java.net.URL;
 import java.util.Calendar;
 
 public class ScheduleActivity extends AppCompatActivity {
-
     private University selectedUniversity;
     private Group selectedGroup;
-
     private TableLayout scheduleTable;
     private String currentScheduleJSON;
 
@@ -34,16 +33,27 @@ public class ScheduleActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_schedule);
 
-        // Получаем выбранный университет и группу из Intent
-        selectedUniversity = getIntent().getParcelableExtra("selected_university");
-        selectedGroup = getIntent().getParcelableExtra("selected_group");
-
 
         scheduleTable = findViewById(R.id.scheduleTable);
         currentScheduleJSON = null;
 
-        // Выполните HTTP GET запрос для получения расписания из API
-        new GetScheduleTask().execute("https://lencodigitexer.github.io/schedule-api/" + selectedUniversity.getName() + "/" + selectedGroup.getName() + "/schedule.json");
+        // Объект SharedPreferences для сохранения данных
+        SharedPreferences sharedPreferences;
+
+        // Получаем объект SharedPreferences по имени "mypref"
+        sharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE);
+
+        // Получаем сохраненные имя и email из SharedPreferences
+        String selectedUniversity = sharedPreferences.getString("selected_university", null);
+        String selectedGroup = sharedPreferences.getString("selected_group", null);
+
+        // Если университет и группа не равны null, выводим их на экран
+        if (selectedUniversity != null & selectedGroup != null){
+            // Выполните HTTP GET запрос для получения расписания из API
+            new GetScheduleTask().execute("https://lencodigitexer.github.io/schedule-api/" + selectedUniversity + "/" + selectedGroup + "/schedule.json");
+        }
+
+
 
         // Настройте обработчики для кнопок дней недели
         Button buttonMonday = findViewById(R.id.buttonMonday);
@@ -89,12 +99,6 @@ public class ScheduleActivity extends AppCompatActivity {
                 displaySchedule(currentScheduleJSON, "saturday");
             }
         });
-    }
-
-    private void loadSchedule(String universityName, String groupName) {
-        // Загрузка расписания по заданному университету и группе
-        String scheduleURL = "https://lencodigitexer.github.io/schedule-api/" + universityName + "/" + groupName + "/schedule.json";
-        new GetScheduleTask().execute(scheduleURL);
     }
 
     private void displaySchedule(String scheduleJSON, String selectedDay) {
