@@ -1,0 +1,81 @@
+
+
+.profile {
+    min-height: 355px;
+    display: inline-block;
+}
+.profile figcaption.ratings{
+    margin-top:20px;
+}
+.profile figcaption.ratings a
+{    color:#f1c40f;
+    font-size:11px;
+}
+.profile figcaption.ratings a:hover
+{    color:#f39c12;
+    text-decoration:none;
+}
+.profile .divider {
+    border-top:1px solid rgba(0,0,0,0.1);
+}
+.profile .emphasis {
+    border-top: 4px solid transparent;
+}
+.profile .emphasis:hover {
+    border-top: 4px solid #1abc9c;
+}
+.profile .emphasis h2 {
+    margin-bottom:0;
+}
+.profile .label {
+    font-weight: bold;
+    padding: 3px 6px;
+    font-size: 11.5px;
+}
+.skills-list {
+    padding: 20px 0;
+    text-align: center;
+}
+.skills-list > div > div{
+    padding: 10px;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    transition: 0.2s;
+}
+.skills-list > div:hover > div{
+    margin-top: -10px;
+    border: 1px solid rgb(200, 200, 200);
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 5px 5px 2px;
+    background: rgba(200, 200, 200, 0.1);
+    transition: 0.5s;
+}
+
+.skills-list > div:hover img {
+    border-radius: 50%;
+    -webkit-transform: rotate(360deg);
+    -moz-transform: rotate(360deg);
+    -o-transform: rotate(360deg);
+    -ms-transform: rotate(360deg);
+    transform: rotate(360deg);
+}
+.services-list {
+    text-align: center;
+    background-color: #FCFCFC;
+    padding: 30px;
+    border: 1px solid #e0eded;
+}
+
+.services-list .service-box {
+    background-color: #fff;
+    border: 1px solid #e0eded;
+    padding: 15px 0;
+}
+
+.services-list .service-icon {
+    text-align: center;
+    padding: 10px 0;
+}
+
+.services-list .fa {
+    font-size: 64px;
+}
